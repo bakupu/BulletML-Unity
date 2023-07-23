@@ -105,14 +105,14 @@ namespace UnityBulletML.Bullets
         {
             return false;
 
-            var screenSpacePosition = _bulletManager.Camera.WorldToViewportPoint(Position);
+            //var screenSpacePosition = _bulletManager.Camera.WorldToViewportPoint(Position);
 
-            return !(
-                screenSpacePosition.x >= _bulletManager.BulletsWidthBoundary.x &&
-                screenSpacePosition.x <= _bulletManager.BulletsWidthBoundary.y &&
-                screenSpacePosition.y >= _bulletManager.BulletsHeightBoundary.x &&
-                screenSpacePosition.y <= _bulletManager.BulletsHeightBoundary.y
-            );
+            //return !(
+            //    screenSpacePosition.x >= _bulletManager.BulletsWidthBoundary.x &&
+            //    screenSpacePosition.x <= _bulletManager.BulletsWidthBoundary.y &&
+            //    screenSpacePosition.y >= _bulletManager.BulletsHeightBoundary.x &&
+            //    screenSpacePosition.y <= _bulletManager.BulletsHeightBoundary.y
+            //);
         }
 
         public bool IsTopBullet()

@@ -18,7 +18,7 @@ using UnityEngine.Jobs;
 
 namespace UnityBulletML.Bullets
 {
-    public class BulletSystem : JobComponentSystem
+    public partial class BulletSystem : SystemBase
     {
         //private EndSimulationEntityCommandBufferSystem endSimulationEntityCommandBufferSystem;
 
@@ -28,7 +28,7 @@ namespace UnityBulletML.Bullets
         //    base.OnCreate();
         //}
 
-        protected override JobHandle OnUpdate(JobHandle inputDependencies)
+        protected override void OnUpdate()
         {
             var job = new BulletSystemJob
             {
@@ -37,13 +37,15 @@ namespace UnityBulletML.Bullets
                 //entityCommandBuffer = endSimulationEntityCommandBufferSystem.CreateCommandBuffer().ToConcurrent()
             };
 
-            inputDependencies = job.Schedule(this, inputDependencies);
-            //endSimulationEntityCommandBufferSystem.AddJobHandleForProducer(inputDependencies);
-            return inputDependencies;
+            job.Schedule();
+
+            //inputDependencies = job.Schedule(this, inputDependencies);
+            ////endSimulationEntityCommandBufferSystem.AddJobHandleForProducer(inputDependencies);
+            //return inputDependencies;
         }
 
         //[BurstCompile]
-        struct BulletSystemJob : IJobForEachWithEntity<Translation, Rotation, Scale>
+        partial struct BulletSystemJob : IJobEntity
         {
             //[NativeDisableParallelForRestriction]
             //public ComponentDataFromEntity<Translation> translationsFromEntity;
@@ -54,8 +56,8 @@ namespace UnityBulletML.Bullets
 
             public void Execute(
                 Entity entity,
-                [ReadOnly] int index, 
-                [ReadOnly] ref Translation translation, 
+                [EntityInQueryIndex] int index,
+                [ReadOnly] ref Translation translation,
                 ref Rotation rotation,
                 ref Scale scale)
             {
@@ -418,10 +420,19 @@ namespace UnityBulletML.Bullets
             _pause = false;
         }
 
-        private void Update()
+        private void FixedUpdate()
         {
             _playerPosition.X = _playerTransform.position.x * StaticPixelPerUnit;
             _playerPosition.Y = _playerTransform.position.y * StaticPixelPerUnit;
+
+            for (int i = 0; i < _bullets.Count; i++)
+            {
+                Bullet currentBullet = _bullets[i];
+                if (!currentBullet.Hidden)
+                {
+                    currentBullet.Update(Time.fixedDeltaTime);
+                }
+            }
 
             ////NativeList<JobHandle> jobHandles = new NativeList<JobHandle>(Allocator.Temp);
             ////for (int i = 0; i < _bullets.Count; i++)
@@ -463,10 +474,8 @@ namespace UnityBulletML.Bullets
             return job.Schedule();
         }
 
-        private void FixedUpdate()
+        private void Update()
         {
-            return;
-
             if (_pause)
                 return;
 
@@ -477,45 +486,45 @@ namespace UnityBulletML.Bullets
                 if (currentBullet.Hidden)
                     continue;
 
-                currentBullet.Update(Time.fixedDeltaTime);
+                //currentBullet.Update(Time.fixedDeltaTime);
 
-                //int batchIndex = i / MAX_BATCH_AMOUNT;
-                //int elementIndex = i % MAX_BATCH_AMOUNT;
+                int batchIndex = i / MAX_BATCH_AMOUNT;
+                int elementIndex = i % MAX_BATCH_AMOUNT;
 
-                //// Do we need to create a new batch?
-                //if (_bulletMatricesBatches.Count <= batchIndex)
-                //{
-                //    _bulletMatricesBatches.Add(new Matrix4x4[MAX_BATCH_AMOUNT]);
-                //    _bulletSpriteOffsetsBatches.Add(new Vector4[MAX_BATCH_AMOUNT]);
-                //    _bulletColorsBatches.Add(new Vector4[MAX_BATCH_AMOUNT]);
-                //}
+                // Do we need to create a new batch?
+                if (_bulletMatricesBatches.Count <= batchIndex)
+                {
+                    _bulletMatricesBatches.Add(new Matrix4x4[MAX_BATCH_AMOUNT]);
+                    _bulletSpriteOffsetsBatches.Add(new Vector4[MAX_BATCH_AMOUNT]);
+                    _bulletColorsBatches.Add(new Vector4[MAX_BATCH_AMOUNT]);
+                }
 
-                //if (!currentBullet.Used)
-                //{
-                //    currentBullet.Hidden = true;
-                //    _unusedBullets.Enqueue(currentBullet);
+                if (!currentBullet.Used)
+                {
+                    currentBullet.Hidden = true;
+                    _unusedBullets.Enqueue(currentBullet);
 
-                //    // Hide unused bullets
-                //    _bulletMatricesBatches[batchIndex][elementIndex] = Matrix4x4.zero;
-                //    _bulletSpriteOffsetsBatches[batchIndex][elementIndex] = Vector4.zero;
-                //    _bulletColorsBatches[batchIndex][elementIndex] = Vector4.zero;
-                //}
-                //else
-                //{
-                //    // We don't want to render top bullets
-                //    if (!currentBullet.IsTopBullet())
-                //    {
-                //        // Update current bullet's data arrays
-                //        _bulletMatricesBatches[batchIndex][elementIndex] = currentBullet.TransformMatrix;
-                //        _bulletSpriteOffsetsBatches[batchIndex][elementIndex] = GetTextureOffset(currentBullet.SpriteIndex);
-                //        _bulletColorsBatches[batchIndex][elementIndex] = new Vector4(
-                //            currentBullet.Color.R / 255f,
-                //            currentBullet.Color.G / 255f,
-                //            currentBullet.Color.B / 255f,
-                //            currentBullet.Color.A / 255f
-                //        );
-                //    }
-                //}
+                    // Hide unused bullets
+                    _bulletMatricesBatches[batchIndex][elementIndex] = Matrix4x4.zero;
+                    _bulletSpriteOffsetsBatches[batchIndex][elementIndex] = Vector4.zero;
+                    _bulletColorsBatches[batchIndex][elementIndex] = Vector4.zero;
+                }
+                else
+                {
+                    // We don't want to render top bullets
+                    if (!currentBullet.IsTopBullet())
+                    {
+                        // Update current bullet's data arrays
+                        _bulletMatricesBatches[batchIndex][elementIndex] = currentBullet.TransformMatrix;
+                        _bulletSpriteOffsetsBatches[batchIndex][elementIndex] = GetTextureOffset(currentBullet.SpriteIndex);
+                        _bulletColorsBatches[batchIndex][elementIndex] = new Vector4(
+                            currentBullet.Color.R / 255f,
+                            currentBullet.Color.G / 255f,
+                            currentBullet.Color.B / 255f,
+                            currentBullet.Color.A / 255f
+                        );
+                    }
+                }
             }
         }
 
