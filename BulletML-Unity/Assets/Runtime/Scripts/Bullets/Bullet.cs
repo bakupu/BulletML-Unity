@@ -1,4 +1,5 @@
-﻿using UnityBulletML.Bullets.Data;
+﻿using System;
+using UnityBulletML.Bullets.Data;
 using UnityEngine;
 using UnityBulletManager = UnityBulletML.Bullets.BulletManager;
 
@@ -90,7 +91,8 @@ namespace UnityBulletML.Bullets
 
         public BulletProfile GetProfile()
         {
-            return _bulletManager.BulletProfiles[SpriteIndex];
+            var profiles = _bulletManager.BulletProfiles;
+            return profiles[Math.Min(profiles.Length - 1, SpriteIndex)];
         }
 
         public override void Update(float dt)
