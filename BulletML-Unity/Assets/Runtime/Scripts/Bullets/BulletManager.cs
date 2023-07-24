@@ -56,20 +56,20 @@ namespace UnityBulletML.Bullets
 
             public void Execute(
                 Entity entity,
-                [EntityInQueryIndex] int index,
-                [ReadOnly] ref Translation translation,
-                ref Rotation rotation,
-                ref Scale scale)
+                [EntityIndexInQuery] int index,
+                ref LocalTransform transform
+                )
             {
-                if (BulletManager.Bullets != null && index < BulletManager.Bullets.Count)
+                if (BulletManager.Bullets != null
+                    && index < BulletManager.Bullets.Count)
                 {
                     BulletManager.Bullets[index].Update(deltaTime);
 
-                    translation.Value.x = BulletManager.Bullets[index].X / 100f;
-                    translation.Value.y = BulletManager.Bullets[index].Y / 100f;
-                    translation.Value.z = -5f;
-                    rotation.Value = quaternion.RotateZ(BulletManager.Bullets[index].Rotation);
-                    scale.Value = BulletManager.Bullets[index].Scale;
+                    transform.Position.x = BulletManager.Bullets[index].X / 100f;
+                    transform.Position.y = BulletManager.Bullets[index].Y / 100f;
+                    transform.Position.z = -5f;
+                    transform.Rotation = quaternion.RotateZ(BulletManager.Bullets[index].Rotation);
+                    transform.Scale = BulletManager.Bullets[index].Scale;
                 }
 
                 //if (translationsFromEntity.Exists(target.targetEntity))
@@ -359,9 +359,9 @@ namespace UnityBulletML.Bullets
                 typeof(RenderMesh),
                 typeof(RenderBounds),
                 typeof(LocalToWorld),
-                typeof(Translation),
-                typeof(Rotation),
-                typeof(Scale)
+                typeof(LocalTransform),
+                typeof(Quaternion),
+                typeof(float)
             );
 
             // Create an entity from the archetype
@@ -374,7 +374,7 @@ namespace UnityBulletML.Bullets
                 Entity entity = entities[i];
 
                 // Use the entity manager to set the component's data
-                _entityManager.SetSharedComponentData(entity, new RenderMesh
+                _entityManager.SetSharedComponentManaged(entity, new RenderMesh
                 {
                     mesh = quad,
                     material = _bulletMaterial

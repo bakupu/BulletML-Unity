@@ -9,11 +9,11 @@ C:\Program Files\Unity\Hub\Editor\2022.3.5f1\Editor\Unity.exe
 -batchMode
 -noUpm
 -name
-AssetImportWorker0
+AssetImportWorker2
 -projectPath
 C:/work/dev_unity/_assets/_bulletml/BulletML-Unity_forked/BulletML-Unity
 -logFile
-Logs/AssetImportWorker0.log
+Logs/AssetImportWorker2.log
 -srvPort
 49833
 Successfully changed project path to: C:/work/dev_unity/_assets/_bulletml/BulletML-Unity_forked/BulletML-Unity
@@ -49,11 +49,11 @@ C:/work/dev_unity/_assets/_bulletml/BulletML-Unity_forked/BulletML-Unity
     "memorysetup-temp-allocator-size-cloud-worker=32768"
     "memorysetup-temp-allocator-size-gi-baking-worker=262144"
     "memorysetup-temp-allocator-size-gfx=262144"
-Player connection [30564] Host "[IP] 172.28.208.1 [Port] 0 [Flags] 2 [Guid] 2266156963 [EditorId] 2266156963 [Version] 1048832 [Id] WindowsEditor(7,i5-9400-1660ti) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" joined multi-casting on [225.0.0.222:54997]...
+Player connection [32816] Host "[IP] 172.28.208.1 [Port] 0 [Flags] 2 [Guid] 3589721415 [EditorId] 3589721415 [Version] 1048832 [Id] WindowsEditor(7,i5-9400-1660ti) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" joined multi-casting on [225.0.0.222:54997]...
 
-Player connection [30564] Host "[IP] 172.28.208.1 [Port] 0 [Flags] 2 [Guid] 2266156963 [EditorId] 2266156963 [Version] 1048832 [Id] WindowsEditor(7,i5-9400-1660ti) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" joined alternative multi-casting on [225.0.0.222:34997]...
+Player connection [32816] Host "[IP] 172.28.208.1 [Port] 0 [Flags] 2 [Guid] 3589721415 [EditorId] 3589721415 [Version] 1048832 [Id] WindowsEditor(7,i5-9400-1660ti) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" joined alternative multi-casting on [225.0.0.222:34997]...
 
-Refreshing native plugins compatible for Editor in 3163.07 ms, found 1 plugins.
+Refreshing native plugins compatible for Editor in 23.06 ms, found 1 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Initialize engine version: 2022.3.5f1 (9674261d40ee)
 [Subsystems] Discovering subsystems at path C:/Program Files/Unity/Hub/Editor/2022.3.5f1/Editor/Data/Resources/UnitySubsystems
@@ -69,8 +69,4 @@ Initialize mono
 Mono path[0] = 'C:/Program Files/Unity/Hub/Editor/2022.3.5f1/Editor/Data/Managed'
 Mono path[1] = 'C:/Program Files/Unity/Hub/Editor/2022.3.5f1/Editor/Data/MonoBleedingEdge/lib/mono/unityjit-win32'
 Mono config path = 'C:/Program Files/Unity/Hub/Editor/2022.3.5f1/Editor/Data/MonoBleedingEdge/etc'
-Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56404
-Begin MonoManager ReloadAssembly
-Registering precompiled unity dll's ...
-Register platform support module: C:/Program Files/Unity/Hub/Editor/2022.3.5f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
-Registered in 0.187216 seconds.
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56576
